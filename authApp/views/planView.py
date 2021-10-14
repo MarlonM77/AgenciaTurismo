@@ -16,15 +16,15 @@ class PlanUserView(generics.RetrieveAPIView):
     permission_classes =  (IsAuthenticated, )
     queryset           =  Plan.objects.all()
 
-    def get_queryset(self, *args, **kwargs):
+    def get(self, *args, **kwargs):
         print("Request:", self.request)
-        print("Args:", self.args)
-        print("KWArgs:", self.kwargs)
+        print("Args:",    self.args)
+        print("KWArgs:",  self.kwargs)
         token           = self.request.META.get('HTTP_AUTHORIZATION')[7:]
         tokenBackend    = TokenBackend(algorithm = settings.SIMPLE_JWT['ALGORITHM'])
         valid_data      = tokenBackend.decode(token,verify = False)
 
-        if valid_data['user_id'] != self.kwargs['user']:
+        if valid_data['user_id'] != kwargs['user']:
             stringResponse = {'detail':'Unauthorized Request'}
             return Response(stringResponse, status = status.HTTP_401_UNAUTHORIZED)
 
@@ -59,7 +59,7 @@ class PlanUpdateView(generics.UpdateAPIView):
     permission_classes  =   (IsAuthenticated, )
     quryset             =   Plan.objects.all()
 
-    def get(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         print("Request:", request)
         print("Args:", args)
         print("KWArgs:", kwargs)
@@ -79,7 +79,7 @@ class PlanDeleteView(generics.DestroyAPIView):
     permission_classes  =   (IsAuthenticated, )
     queryset            =   Plan.objects.all()
 
-    def get(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         print("Request:", request)
         print("Args:", args)
         print("Kwargs:", kwargs)
