@@ -1,32 +1,37 @@
-from rest_framework import serializers
-from authApp.models.user import User
-from authApp.models.account import Account
-from authApp.serializers.accountSerializer import AccountSerializer
+from rest_framework             import serializers
+from authApp.models.user        import User
+from authApp.models.plan        import Plan
+from .planSerializer            import PlanSerializer    
+
 
 class UserSerializer(serializers.ModelSerializer):
-    account = AccountSerializer()
+
+    plan = PlanSerializer
     class Meta:
-        model = User
-        fields = ['id', 'username', 'password', 'name', 'email', 'account']
+        model  = User
+        fields = ['id', 'username', 'password', 'name', 'email', 'plan']
 
     def create(self, validated_data):
-        accountData = validated_data.pop('account')
+        planData     = validated_data.pop('plan')
         userInstance = User.objects.create(**validated_data)
-        Account.objects.create(user=userInstance, **accountData)
-        return userInstance
+        Plan.objects.create(user = userInstance, **planData)
+        return userInstance        
 
     def to_representation(self, obj):
-        user = User.objects.get(id=obj.id)
-        account = Account.objects.get(user=obj.id)
+        user    = User.objects.get(id   = obj.id)
+        plan    = Plan.objects.get(user = obj.id)
+
         return {
-        'id': user.id,
+        'id':       user.id,
         'username': user.username,
-        'name': user.name,
-        'email': user.email,
-        'account': {
-        'id': account.id,
-        'balance': account.balance,
-        'lastChangeDate': account.lastChangeDate,
-        'isActive': account.isActive
-    }
-}
+        'name':     user.name,
+        'email':    user.email,
+        'plan': {
+            'id_plan':         plan.id,
+            'valor':           plan.valor,    
+            'fecha_inicio':    plan.fecha_inicio,
+            'fecha_fin':       plan.fecha_fin,
+            'nombre_plan':     plan.nombre_plan,
+            'cant_personas':   plan.cant_personas
+            }
+        }
