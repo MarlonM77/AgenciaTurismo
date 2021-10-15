@@ -4,7 +4,7 @@ from .user                       import User
 class Plan(models.Model):
 
     id              = models.AutoField(primary_key = True)
-    user            = models.ForeignKey(User, related_name='plan', on_delete = models.CASCADE, null = True, blank = True)
+    user            = models.ForeignKey(User, related_name='plan', on_delete = models.CASCADE, null = True)
     valor           = models.IntegerField(null = True, blank = True)
     fecha_inicio    = models.DateTimeField(null = True, blank = True)
     fecha_fin       = models.DateTimeField(null = True, blank = True)

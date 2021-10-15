@@ -1,12 +1,10 @@
 from django.conf                        import settings
 from django.http                        import request
-from jwt                                import algorithms
 from rest_framework                     import generics, status
-from rest_framework                     import serializers
 from rest_framework.response            import Response
 from rest_framework.permissions         import IsAuthenticated
-from rest_framework.serializers         import Serializer
 from rest_framework_simplejwt.backends  import TokenBackend
+
 from authApp.models.plan                import Plan
 from authApp.serializers.planSerializer import PlanSerializer
 
