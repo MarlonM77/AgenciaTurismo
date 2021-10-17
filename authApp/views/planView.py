@@ -1,5 +1,4 @@
 from django.conf                        import settings
-from django.http                        import request
 from rest_framework                     import generics, status
 from rest_framework.response            import Response
 from rest_framework.permissions         import IsAuthenticated
@@ -13,7 +12,7 @@ class PlanUserView(generics.RetrieveAPIView):
     permission_classes =  (IsAuthenticated, )
     queryset           =  Plan.objects.all()
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         print("Request:", self.request)
         print("Args:",    self.args)
         print("KWArgs:",  self.kwargs)                      
@@ -62,7 +61,7 @@ class PlanUpdateView(generics.UpdateAPIView):
         print("KWArgs:", kwargs)
         token           = request.META.get('HTTP_AUTHORIZATION')[7:]
         tokenBackend    = TokenBackend(algorithm = settings.SIMPLE_JWT['ALGORITHM'])
-        valid_data      = tokenBackend.decoe(token, verify = False)
+        valid_data      = tokenBackend.decode(token, verify = False)
 
         if valid_data['user_id'] != request.data['user_id']:
             stringResponse = {'detail' : 'Unauthorized Request'}

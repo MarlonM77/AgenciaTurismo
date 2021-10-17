@@ -1,10 +1,11 @@
 from django.db                   import models
-from .user                       import User
+from authApp.models.user         import User
+
 
 class Plan(models.Model):
 
     id              = models.AutoField(primary_key = True)
-    user            = models.ForeignKey(User, related_name='plan', on_delete = models.CASCADE, null = True)
+    user            = models.ForeignKey(User, related_name = "user", on_delete = models.CASCADE)
     valor           = models.IntegerField(null = True, blank = True)
     fecha_inicio    = models.DateTimeField(null = True, blank = True)
     fecha_fin       = models.DateTimeField(null = True, blank = True)
