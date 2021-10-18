@@ -21,6 +21,7 @@ class PlanSerializer(serializers.ModelSerializer):
             'descripcion':     plan.descripcion,
             'cant_personas':   plan.cant_personas,
             'user': {
+                'id':         user.id,
                 'username':   user.username,
                 'name':       user.name,
                 'email':      user.email
