@@ -12,15 +12,12 @@ class PlanUserView(generics.RetrieveAPIView):
     permission_classes =  (IsAuthenticated, )
     queryset           =  Plan.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        print("Request:", self.request)
-        print("Args:",    self.args)
-        print("KWArgs:",  self.kwargs)                      
+    def get(self, request, *args, **kwargs):                  
         token           = self.request.META.get('HTTP_AUTHORIZATION')[7:]
         tokenBackend    = TokenBackend(algorithm = settings.SIMPLE_JWT['ALGORITHM'])
         valid_data      = tokenBackend.decode(token,verify = False)
 
-        if valid_data['user_id'] != kwargs['user']:
+        if valid_data['user_id'] != kwargs['pk']:
             stringResponse = {'detail':'Unauthorized Request'}
             return Response(stringResponse, status = status.HTTP_401_UNAUTHORIZED)
 
