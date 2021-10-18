@@ -53,7 +53,7 @@ class PlanCreateView(generics.CreateAPIView):
 class PlanUpdateView(generics.UpdateAPIView):
     serializer_class    =   PlanSerializer
     permission_classes  =   (IsAuthenticated, )
-    quryset             =   Plan.objects.all()
+    queryset            =   Plan.objects.all()
 
     def put(self, request, *args, **kwargs):
         print("Request:", request)
