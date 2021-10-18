@@ -15,8 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
         return userInstance        
 
     def to_representation(self, obj):
-        user    = User.objects.get(id   = obj.id)
-        plan    = Plan.objects.get(user = obj.id)
+        user    = User.objects.get(id = obj.id)
 
         return {
             'id':       user.id,
