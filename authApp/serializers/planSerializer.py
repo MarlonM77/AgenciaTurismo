@@ -9,11 +9,18 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = ['user', 'valor', 'fecha_inicio', 'fecha_fin', 'nombre_plan', 'descripcion', 'cant_personas']
     
     def to_representation(self, obj):
-        user = User.objects.get(id = obj.user)
+        user = User.objects.get(id = obj.user_id)
         plan = Plan.objects.get(id = obj.id)
         
 
         return{
+            'user': {
+                'id':         user.id,
+                'username':   user.username,
+                'name':       user.name,
+                'email':      user.email
+                
+            }, 'reservas':{ 
             'id':              plan.id,
             'valor':           plan.valor,
             'fecha_inicio':    plan.fecha_inicio,
@@ -21,12 +28,7 @@ class PlanSerializer(serializers.ModelSerializer):
             'nombre_plan':     plan.nombre_plan,
             'descripcion':     plan.descripcion,
             'cant_personas':   plan.cant_personas,
-            'user': {
-                'id':         user.id,
-                'username':   user.username,
-                'name':       user.name,
-                'email':      user.email
-            }   
+            }
         }
 
 
