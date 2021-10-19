@@ -21,7 +21,7 @@ class PlanUserListView(generics.ListAPIView):
             stringResponse = {'detail':'Unauthorized Request'}
             return Response(stringResponse, status = status.HTTP_401_UNAUTHORIZED)
 
-        queryset = Plan.objects.all()
+        queryset = Plan.objects.filter(user_id = self.kwargs['user'])
         return queryset  
 
 
