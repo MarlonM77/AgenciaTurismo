@@ -7,12 +7,37 @@ from rest_framework_simplejwt.backends  import TokenBackend
 from authApp.models.plan                import Plan
 from authApp.serializers.planSerializer import PlanSerializer
 
+
+class PlanUserListView(generics.ListAPIView):
+    serializer_class    = PlanSerializer
+    permission_classes  = (IsAuthenticated,)
+
+    def get_queryset(self):                  
+        token           = self.request.META.get('HTTP_AUTHORIZATION')[7:]
+        tokenBackend    = TokenBackend(algorithm = settings.SIMPLE_JWT['ALGORITHM'])
+        valid_data      = tokenBackend.decode(token,verify = False)
+
+        if valid_data['user_id'] != self.kwargs['user']:
+            stringResponse = {'detail':'Unauthorized Request'}
+            return Response(stringResponse, status = status.HTTP_401_UNAUTHORIZED)
+
+        queryset = Plan.objects.filter(user_id = self.kwargs['user'])
+        return queryset  
+
+
 class PlanUserView(generics.RetrieveAPIView):
     serializer_class   =  PlanSerializer
     permission_classes =  (IsAuthenticated, )
     queryset           =  Plan.objects.all()
 
     def get(self, request, *args, **kwargs):                  
+        token           = self.request.META.get('HTTP_AUTHORIZATION')[7:]
+        tokenBackend    = TokenBackend(algorithm = settings.SIMPLE_JWT['ALGORITHM'])
+        valid_data      = tokenBackend.decode(token,verify = False)
+
+        if valid_data['user_id'] != kwargs['user']:
+            stringResponse = {'detail':'Unauthorized Request'}
+            return Response(stringResponse, status = status.HTTP_401_UNAUTHORIZED)
 
         return super().get(request, *args, **kwargs)
 
